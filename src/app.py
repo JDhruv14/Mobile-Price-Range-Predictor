@@ -39,11 +39,13 @@ st.markdown("""
             margin-top: 30px;
         }
         .result-title {
-            color: #3F51B5;
-            font-size: 24px;
+            color: #000;
+            font-size: 26px;
+            font-weight: bold;
             margin: 0;
         }
         .result-text {
+            color: #000;
             font-size: 16px;
             margin: 10px 0;
         }
@@ -57,15 +59,22 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ------------------------------
-# Header Section with Emoji and GIF
+# Header Section without GIF inside header-container
 # ------------------------------
 st.markdown("""
     <div class="header-container">
         <h1>📱 Mobile Price Prediction</h1>
         <p>
             Provide your mobile's specifications below for an accurate prediction of its price category. 
-            <img src="https://i.gifer.com/5hoN.gif" alt="Mobile Prediction GIF" width="200">
+            Our advanced Random Forest model analyzes features like battery, camera, memory, and connectivity.
         </p>
+    </div>
+""", unsafe_allow_html=True)
+
+# Place the GIF outside of the header-container div
+st.markdown("""
+    <div style="text-align: center; margin-bottom: 30px;">
+        <img src="https://i.gifer.com/5hoN.gif" alt="Mobile Prediction GIF" width="200">
     </div>
 """, unsafe_allow_html=True)
 
@@ -114,11 +123,12 @@ sc_w          = st.slider('Screen Width (cm)', min_value=2, max_value=10, value=
 talk_time     = st.number_input('Talk Time (hours)', min_value=1, max_value=50, value=10)
 
 # ------------------------------
-# Prediction Button (Centered and Attractive)
+# Prediction Button (Centered)
 # ------------------------------
-col1, col2, col3 = st.columns([1,2,1])
-with col2:
+with st.container():
+    st.markdown('<div class="center-button">', unsafe_allow_html=True)
     predict_button = st.button('🎯 Predict Price Range')
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # ------------------------------
 # Prediction and Result Display
@@ -165,7 +175,7 @@ if model and predict_button:
         st.markdown(f"""
             <div class="result-box">
                 <p class="result-title">Predicted Price Range:</p>
-                <p class="result-text" style="font-size: 18px;">The model predicts the Mobile is a <strong>{prediction_text}</strong> Mobile.</p>
+                <p class="result-text">The model predicts the Mobile is a <strong>{prediction_text}</strong> Mobile.</p>
             </div>
         """, unsafe_allow_html=True)
     
