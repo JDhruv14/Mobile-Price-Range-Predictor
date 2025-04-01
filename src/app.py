@@ -74,7 +74,7 @@ st.markdown("""
 # Place the GIF outside of the header-container div
 st.markdown("""
     <div style="text-align: center; margin-bottom: 30px;">
-        <img src="https://i.gifer.com/5hoN.gif" alt="Mobile Prediction GIF" width="200">
+        <img src="https://i.gifer.com/5hoN.gif" alt="Mobile Prediction GIF">
     </div>
 """, unsafe_allow_html=True)
 
@@ -205,8 +205,8 @@ with st.expander("About this predictor"):
     
 with st.expander("About This App"):
     st.markdown("""
-        **Developed by:** Your Name  
-        **Dataset Used:** Mobile Price Range Dataset  
+        **Developed by:** Dhruv Jaradi & Kevin Dave  
+        **Dataset Used:** https://www.kaggle.com/datasets/iabhishekofficial/mobile-price-classification?select=train.csv  
         **Machine Learning Algorithm:** Random Forest Classifier  
         **Description:**  
         This app leverages advanced machine learning techniques to analyze mobile specifications and accurately predict the mobile's price category.
