@@ -74,7 +74,7 @@ st.markdown("""
 # Place the GIF outside of the header-container div
 st.markdown("""
     <div style="text-align: center; margin-bottom: 30px;">
-        <img src="https://i.gifer.com/5hoN.gif" alt="Mobile Prediction GIF">
+        <img src="https://i.gifer.com/5hoN.gif" alt="Mobile Prediction GIF" height = 200px>
     </div>
 """, unsafe_allow_html=True)
 
