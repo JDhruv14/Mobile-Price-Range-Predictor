@@ -4,18 +4,13 @@ import streamlit as st
 import pandas as pd
 
 # ------------------------------
-# Custom Header with Styling
+# Custom CSS Styling
 # ------------------------------
 st.markdown("""
-    <div class="header-container">
-        <h1 style="color: #1A73E8;">Mobile Price Prediction</h1>
-        <img src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" alt="Mobile Prediction GIF" width="150">
-        <p style="font-size: 18px; color: #555;">
-            Enter detailed mobile specifications below to get an accurate prediction of the device category. 
-            Our model considers various features like battery, camera, memory, and connectivity to determine if your mobile is Low Range, Mid-Range, Mid Range-Flagship, or Flagship.
-        </p>
-    </div>
     <style>
+        body {
+            font-family: Consolas, monospace;
+        }
         .header-container {
             background-color: #f0f2f6;
             padding: 30px;
@@ -23,14 +18,57 @@ st.markdown("""
             text-align: center;
             margin-bottom: 30px;
         }
+        .header-container h1 {
+            color: #1A73E8;
+            margin-bottom: 10px;
+        }
+        .header-container p {
+            color: #555;
+            font-size: 18px;
+        }
+        .subheader {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #D93025;
+        }
+        .result-box {
+            background-color: #F5F5F5;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .result-title {
+            color: #3F51B5;
+            font-size: 24px;
+            margin: 0;
+        }
+        .result-text {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .center-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
     </style>
 """, unsafe_allow_html=True)
 
+# ------------------------------
+# Header Section with Emoji and GIF
+# ------------------------------
 st.markdown("""
-    <div style="text-align: center; margin-bottom: 30px;">
-        <h2 style="color: #D93025;">Enter Mobile Specifications</h2>
+    <div class="header-container">
+        <h1>📱 Mobile Price Prediction</h1>
+        <p>
+            Provide your mobile's specifications below for an accurate prediction of its price category. 
+        </p>
     </div>
 """, unsafe_allow_html=True)
+<img src="https://i.gifer.com/5hoN.gif" alt="Mobile Prediction GIF" width="200">
+st.markdown('<h2 class="subheader">Enter Mobile Specifications</h2>', unsafe_allow_html=True)
 
 # ------------------------------
 # Load the Model (Cached)
@@ -49,90 +87,89 @@ def load_model():
 model = load_model()
 
 # ------------------------------
-# Input Widgets for Mobile Features
+# Input Widgets for Mobile Features (Single Column Layout)
 # ------------------------------
-# Create a multi-column layout
-col1, col2, col3 = st.columns(3)
+battery_power = st.number_input('Battery Power (mAh)', min_value=500, max_value=2000, value=1000, step=50)
+clock_speed   = st.number_input('Clock Speed (GHz)', min_value=0.5, max_value=3.0, value=1.5, step=0.1)
+fc            = st.slider('Front Camera (MP)', min_value=0, max_value=20, value=5)
+int_memory    = st.number_input('Internal Memory (GB)', min_value=2, max_value=128, value=16, step=2)
+mobile_wt     = st.number_input('Mobile Weight (grams)', min_value=80, max_value=250, value=150, step=5)
+n_cores       = st.slider('Number of Cores', min_value=1, max_value=8, value=4)
+px_height     = st.slider('Screen Resolution Height (px)', min_value=200, max_value=3000, value=800)
 
-with col1:
-    battery_power = st.number_input('Battery Power (mAh)', min_value=500, max_value=2000, value=1000, step=50)
-    clock_speed = st.number_input('Clock Speed (GHz)', min_value=0.5, max_value=3.0, value=1.5, step=0.1)
-    fc = st.slider('Front Camera (MP)', min_value=0, max_value=20, value=5)
-    int_memory = st.number_input('Internal Memory (GB)', min_value=2, max_value=128, value=16, step=2)
-    mobile_wt = st.number_input('Mobile Weight (grams)', min_value=80, max_value=250, value=150, step=5)
-    n_cores = st.slider('Number of Cores', min_value=1, max_value=8, value=4)
-    px_height = st.slider('Screen Resolution Height (px)', min_value=200, max_value=3000, value=800)
-    
+blue          = st.selectbox('Bluetooth', options=[("Yes", 1), ("No", 0)], format_func=lambda x: x[0])[1]
+dual_sim      = st.selectbox('Dual SIM', options=[("Yes", 1), ("No", 0)], format_func=lambda x: x[0])[1]
+four_g        = st.selectbox('4G Support', options=[("Yes", 1), ("No", 0)], format_func=lambda x: x[0])[1]
+three_g       = st.selectbox('3G Support', options=[("Yes", 1), ("No", 0)], format_func=lambda x: x[0])[1]
+touch_screen  = st.selectbox('Touch Screen', options=[("Yes", 1), ("No", 0)], format_func=lambda x: x[0])[1]
+wifi          = st.selectbox('WiFi', options=[("Yes", 1), ("No", 0)], format_func=lambda x: x[0])[1]
+ram           = st.slider('RAM (MB)', min_value=256, max_value=4096, value=2048, step=256)
+
+m_dep         = st.number_input('Mobile Depth (cm)', min_value=0.0, max_value=1.0, value=0.5, step=0.01, format="%.2f")
+pc            = st.slider('Primary Camera (MP)', min_value=0, max_value=20, value=12)
+px_width      = st.slider('Screen Resolution Width (px)', min_value=100, max_value=2000, value=600)
+sc_h          = st.slider('Screen Height (cm)', min_value=5, max_value=20, value=10)
+sc_w          = st.slider('Screen Width (cm)', min_value=2, max_value=10, value=5)
+talk_time     = st.number_input('Talk Time (hours)', min_value=1, max_value=50, value=10)
+
+# ------------------------------
+# Prediction Button (Centered and Attractive)
+# ------------------------------
+col1, col2, col3 = st.columns([1,2,1])
 with col2:
-    # Binary features as dropdowns
-    blue = st.selectbox('Bluetooth', options=[("Yes", 1), ("No", 0)], format_func=lambda x: x[0])[1]
-    dual_sim = st.selectbox('Dual SIM', options=[("Yes", 1), ("No", 0)], format_func=lambda x: x[0])[1]
-    four_g = st.selectbox('4G Support', options=[("Yes", 1), ("No", 0)], format_func=lambda x: x[0])[1]
-    three_g = st.selectbox('3G Support', options=[("Yes", 1), ("No", 0)], format_func=lambda x: x[0])[1]
-    touch_screen = st.selectbox('Touch Screen', options=[("Yes", 1), ("No", 0)], format_func=lambda x: x[0])[1]
-    wifi = st.selectbox('WiFi', options=[("Yes", 1), ("No", 0)], format_func=lambda x: x[0])[1]
-    ram = st.slider('RAM (MB)', min_value=256, max_value=4096, value=2048, step=256)
-    
-with col3:
-    m_dep = st.number_input('Mobile Depth (cm)', min_value=0.0, max_value=1.0, value=0.5, step=0.01, format="%.2f")
-    pc = st.slider('Primary Camera (MP)', min_value=0, max_value=20, value=12)
-    px_width = st.slider('Screen Resolution Width (px)', min_value=100, max_value=2000, value=600)
-    sc_h = st.slider('Screen Height (cm)', min_value=5, max_value=20, value=10)
-    sc_w = st.slider('Screen Width (cm)', min_value=2, max_value=10, value=5)
-    talk_time = st.number_input('Talk Time (hours)', min_value=1, max_value=50, value=10)
-    
+    predict_button = st.button('🎯 Predict Price Range')
+
 # ------------------------------
-# Prediction Button and Display Logic
+# Prediction and Result Display
 # ------------------------------
-# Define mapping from prediction number to category name
+# Mapping numeric prediction to descriptive category with emoji
 price_mapping = {
-    0: "Low Range",
-    1: "Mid-Range",
-    2: "Mid Range-Flagship",
-    3: "Flagship"
+    0: "📉 Low Range",
+    1: "📊 Mid-Range",
+    2: "💫 Mid Range-Flagship",
+    3: "🚀 Flagship"
 }
 
-if model:
-    if st.button('Predict Price Range'):
-        try:
-            # Prepare input data as DataFrame matching the training features order
-            input_data = pd.DataFrame({
-                'battery_power': [battery_power],
-                'blue': [blue],
-                'clock_speed': [clock_speed],
-                'dual_sim': [dual_sim],
-                'fc': [fc],
-                'four_g': [four_g],
-                'int_memory': [int_memory],
-                'm_dep': [m_dep],
-                'mobile_wt': [mobile_wt],
-                'n_cores': [n_cores],
-                'pc': [pc],
-                'px_height': [px_height],
-                'px_width': [px_width],
-                'ram': [ram],
-                'sc_h': [sc_h],
-                'sc_w': [sc_w],
-                'talk_time': [talk_time],
-                'three_g': [three_g],
-                'touch_screen': [touch_screen],
-                'wifi': [wifi]
-            })
-            
-            # Make prediction using the loaded model
-            prediction_numeric = model.predict(input_data)[0]
-            prediction_text = price_mapping.get(prediction_numeric, "Unknown")
-            
-            # Display result with a custom styled message
-            st.markdown(f"""
-                <div style='background-color: #E1FFE4; padding: 20px; border-radius: 10px; text-align: center;'>
-                    <h3 style='color: #6BFF6B; margin: 0;'>Predicted Price Range:</h3>
-                    <h2 style='color: #2E7D32; margin: 10px 0;'>The model predicts the Mobile is a {prediction_text} Mobile.</h2>
-                </div>
-            """, unsafe_allow_html=True)
+if model and predict_button:
+    try:
+        # Prepare input data as a DataFrame matching the training features order
+        input_data = pd.DataFrame({
+            'battery_power': [battery_power],
+            'blue': [blue],
+            'clock_speed': [clock_speed],
+            'dual_sim': [dual_sim],
+            'fc': [fc],
+            'four_g': [four_g],
+            'int_memory': [int_memory],
+            'm_dep': [m_dep],
+            'mobile_wt': [mobile_wt],
+            'n_cores': [n_cores],
+            'pc': [pc],
+            'px_height': [px_height],
+            'px_width': [px_width],
+            'ram': [ram],
+            'sc_h': [sc_h],
+            'sc_w': [sc_w],
+            'talk_time': [talk_time],
+            'three_g': [three_g],
+            'touch_screen': [touch_screen],
+            'wifi': [wifi]
+        })
         
-        except Exception as e:
-            st.error(f"An error occurred during prediction: {str(e)}")
+        # Make prediction using the loaded model
+        prediction_numeric = model.predict(input_data)[0]
+        prediction_text = price_mapping.get(prediction_numeric, "Unknown")
+        
+        # Display result with custom styling
+        st.markdown(f"""
+            <div class="result-box">
+                <p class="result-title">Predicted Price Range:</p>
+                <p class="result-text" style="font-size: 18px;">The model predicts the Mobile is a <strong>{prediction_text}</strong> Mobile.</p>
+            </div>
+        """, unsafe_allow_html=True)
+    
+    except Exception as e:
+        st.error(f"An error occurred during prediction: {str(e)}")
 
 # ------------------------------
 # Additional Information Expander
@@ -148,18 +185,18 @@ with st.expander("About this predictor"):
         - Screen Resolution and Dimensions  
         - Connectivity Features (Bluetooth, Dual SIM, 3G, 4G, WiFi, Touch Screen)  
         
-        The price range is categorized into:
-        - **Low Range (0)**
-        - **Mid-Range (1)**
-        - **Mid Range-Flagship (2)**
-        - **Flagship (3)**
+        **Price Range Categories:**  
+        - **0: 📉 Low Range**  
+        - **1: 📊 Mid-Range**  
+        - **2: 💫 Mid Range-Flagship**  
+        - **3: 🚀 Flagship**
     """)
-
+    
 with st.expander("About This App"):
     st.markdown("""
         **Developed by:** Your Name  
         **Dataset Used:** Mobile Price Range Dataset  
         **Machine Learning Algorithm:** Random Forest Classifier  
         **Description:**  
-        This app uses advanced machine learning techniques to analyze detailed mobile specifications and accurately predict the mobile's price category.
+        This app leverages advanced machine learning techniques to analyze mobile specifications and accurately predict the mobile's price category.
     """)
