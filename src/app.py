@@ -31,12 +31,19 @@ st.markdown("""
             margin-bottom: 20px;
             color: #D93025;
         }
+        .center-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
         .result-box {
-            background-color: #F5F5F5;
-            padding: 20px;
+            background-color: #f0f2f6;
+            padding: 30px;
             border-radius: 10px;
             text-align: center;
             margin-top: 30px;
+            border: 2px solid #1A73E8;
         }
         .result-title {
             color: #000;
@@ -48,12 +55,6 @@ st.markdown("""
             color: #000;
             font-size: 16px;
             margin: 10px 0;
-        }
-        .center-button {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-            margin-bottom: 30px;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -74,7 +75,7 @@ st.markdown("""
 # Place the GIF outside of the header-container div
 st.markdown("""
     <div style="text-align: center; margin-bottom: 30px;">
-        <img src="https://i.gifer.com/5hoN.gif" alt="Mobile Prediction GIF" height = 250px width=400px>
+        <img src="https://i.gifer.com/5hoN.gif" alt="Mobile Prediction GIF" height="250px" width="400px">
     </div>
 """, unsafe_allow_html=True)
 
@@ -171,7 +172,7 @@ if model and predict_button:
         prediction_numeric = model.predict(input_data)[0]
         prediction_text = price_mapping.get(prediction_numeric, "Unknown")
         
-        # Display result with custom styling
+        # Display result with attractive styling (like header-container)
         st.markdown(f"""
             <div class="result-box">
                 <p class="result-title">Predicted Price Range:</p>
