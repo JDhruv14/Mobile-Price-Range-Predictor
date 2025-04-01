@@ -8,31 +8,27 @@ import pandas as pd
 # ------------------------------
 st.markdown("""
     <div class="header-container">
-        <h1>Mobile Price Prediction</h1>
-        <p>Enter your mobile specifications to predict its price range using a Random Forest model.</p>
+        <h1 style="color: #1A73E8;">Mobile Price Prediction</h1>
+        <img src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" alt="Mobile Prediction GIF" width="150">
+        <p style="font-size: 18px; color: #555;">
+            Enter detailed mobile specifications below to get an accurate prediction of the device category. 
+            Our model considers various features like battery, camera, memory, and connectivity to determine if your mobile is Low Range, Mid-Range, Mid Range-Flagship, or Flagship.
+        </p>
     </div>
     <style>
         .header-container {
             background-color: #f0f2f6;
-            padding: 20px;
+            padding: 30px;
             border-radius: 10px;
             text-align: center;
-            margin-bottom: 20px;
-        }
-        .header-container h1 {
-            color: #4CAF50;
-            margin-bottom: 10px;
-        }
-        .header-container p {
-            color: #333;
-            font-size: 16px;
+            margin-bottom: 30px;
         }
     </style>
 """, unsafe_allow_html=True)
 
 st.markdown("""
     <div style="text-align: center; margin-bottom: 30px;">
-        <h2 style="color: #4CAF50;">Enter Mobile Specifications</h2>
+        <h2 style="color: #D93025;">Enter Mobile Specifications</h2>
     </div>
 """, unsafe_allow_html=True)
 
@@ -41,7 +37,7 @@ st.markdown("""
 # ------------------------------
 @st.cache_resource
 def load_model():
-    # Navigate up one level from 'src' to the project root, then into 'model'
+    # Navigate one level up from 'src' folder to 'model' folder
     model_path = os.path.join(os.path.dirname(__file__), '..', 'model', 'mobile_price_model.pkl')
     if os.path.exists(model_path):
         with open(model_path, 'rb') as file:
@@ -88,6 +84,14 @@ with col3:
 # ------------------------------
 # Prediction Button and Display Logic
 # ------------------------------
+# Define mapping from prediction number to category name
+price_mapping = {
+    0: "Low Range",
+    1: "Mid-Range",
+    2: "Mid Range-Flagship",
+    3: "Flagship"
+}
+
 if model:
     if st.button('Predict Price Range'):
         try:
@@ -116,13 +120,14 @@ if model:
             })
             
             # Make prediction using the loaded model
-            prediction = model.predict(input_data)[0]
+            prediction_numeric = model.predict(input_data)[0]
+            prediction_text = price_mapping.get(prediction_numeric, "Unknown")
             
             # Display result with a custom styled message
             st.markdown(f"""
                 <div style='background-color: #E1FFE4; padding: 20px; border-radius: 10px; text-align: center;'>
-                    <h3 style='color: #6BFF6B; margin: 0;'>Predicted Price Range: {prediction}</h3>
-                    <p style='color: #4CAF50;'>The model predicts the mobile to be in price range {prediction}.</p>
+                    <h3 style='color: #6BFF6B; margin: 0;'>Predicted Price Range:</h3>
+                    <h2 style='color: #2E7D32; margin: 10px 0;'>The model predicts the Mobile is a {prediction_text} Mobile.</h2>
                 </div>
             """, unsafe_allow_html=True)
         
@@ -134,7 +139,7 @@ if model:
 # ------------------------------
 with st.expander("About this predictor"):
     st.markdown("""
-        This mobile price prediction model is based on a Random Forest algorithm trained on a dataset of mobile specifications.  
+        This mobile price prediction model is based on a Random Forest algorithm trained on a comprehensive dataset of mobile specifications.  
         **Key Features Used:**  
         - Battery Power  
         - Clock Speed  
@@ -143,7 +148,11 @@ with st.expander("About this predictor"):
         - Screen Resolution and Dimensions  
         - Connectivity Features (Bluetooth, Dual SIM, 3G, 4G, WiFi, Touch Screen)  
         
-        The price range is categorized based on the mobile's features.
+        The price range is categorized into:
+        - **Low Range (0)**
+        - **Mid-Range (1)**
+        - **Mid Range-Flagship (2)**
+        - **Flagship (3)**
     """)
 
 with st.expander("About This App"):
@@ -151,5 +160,6 @@ with st.expander("About This App"):
         **Developed by:** Your Name  
         **Dataset Used:** Mobile Price Range Dataset  
         **Machine Learning Algorithm:** Random Forest Classifier  
-        **Description:** Enter mobile specifications to get an instant prediction of the mobile's price range.
+        **Description:**  
+        This app uses advanced machine learning techniques to analyze detailed mobile specifications and accurately predict the mobile's price category.
     """)
