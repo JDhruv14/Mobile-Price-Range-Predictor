@@ -41,12 +41,13 @@ st.markdown("""
 # ------------------------------
 @st.cache_resource
 def load_model():
+    # Adjusted path for model folder
     model_path = os.path.join(os.path.dirname(__file__), 'model', 'mobile_price_model.pkl')
     if os.path.exists(model_path):
         with open(model_path, 'rb') as file:
             return pickle.load(file)
     else:
-        st.error("Model file not found in 'models/' directory. Please check the path.")
+        st.error("Model file not found in 'model/' directory. Please check the path.")
         return None
 
 model = load_model()
