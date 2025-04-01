@@ -64,10 +64,11 @@ st.markdown("""
         <h1>📱 Mobile Price Prediction</h1>
         <p>
             Provide your mobile's specifications below for an accurate prediction of its price category. 
+            <img src="https://i.gifer.com/5hoN.gif" alt="Mobile Prediction GIF" width="200">
         </p>
     </div>
 """, unsafe_allow_html=True)
-<img src="https://i.gifer.com/5hoN.gif" alt="Mobile Prediction GIF" width="200">
+
 st.markdown('<h2 class="subheader">Enter Mobile Specifications</h2>', unsafe_allow_html=True)
 
 # ------------------------------
