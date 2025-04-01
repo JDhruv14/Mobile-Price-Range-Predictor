@@ -41,7 +41,7 @@ st.markdown("""
 # ------------------------------
 @st.cache_resource
 def load_model():
-    model_path = os.path.join(os.path.dirname(__file__), 'models', 'mobile_price_model.pkl')
+    model_path = os.path.join(os.path.dirname(__file__), 'model', 'mobile_price_model.pkl')
     if os.path.exists(model_path):
         with open(model_path, 'rb') as file:
             return pickle.load(file)
